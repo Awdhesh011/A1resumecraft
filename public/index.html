@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="Build a professional resume with live preview and PDF export.">
+  <title>A1Resumecraft — Resume Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="A1Resumecraft home">
+      <span class="brand-mark"><span></span><span></span><span></span></span>
+      <span>A1<span class="brand-accent">resumecraft</span></span>
+    </a>
+    <div class="topbar-right">
+      <span class="save-status"><span class="status-dot"></span><span id="saveStatus">Saved locally</span></span>
+      <button class="button button-primary top-download" id="downloadTop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 16v4h14v-4"/></svg> Download PDF</button>
+      <button class="button button-quiet" id="exportWordTop" type="button">Export Word</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="editor-panel">
+      <div class="intro">
+        <div class="eyebrow"><span class="eyebrow-line"></span> YOUR NEXT CHAPTER STARTS HERE</div>
+        <h1>Build a resume<br><span>that opens doors.</span></h1>
+        <p>Bring your experience to life. Fill in your details and see your resume take shape instantly.</p>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-top"><span>Resume completeness</span><strong id="progressPercent">25%</strong></div>
+        <div class="progress-track"><span id="progressBar"></span></div>
+        <p id="progressHint">A few details can make a big difference.</p>
+      </div>
+
+      <div class="section-heading">
+        <div><span class="section-number">01</span><input class="section-title-input" type="text" data-section-name="personalDetails" value="Personal details" aria-label="Personal details section name"></div>
+        <span class="required-note">* Required</span>
+      </div>
+      <form id="resumeForm" autocomplete="on">
+        <div class="form-grid">
+          <label class="field full"><span>Full name <i>*</i></span><input name="fullName" placeholder="e.g. Awdhesh Kumar" value="Awdhesh Kumar" required></label>
+          <label class="field full"><span>Professional title</span><input name="jobTitle" placeholder="e.g. Job Title" value="Job Title"></label>
+          <label class="field"><span>Email address</span><input name="email" type="email" placeholder="you@example.com" value="awdhesh@example.com"></label>
+          <label class="field"><span>Phone number</span><input name="phone" type="tel" placeholder="+91 98765 43210" value="+91 98765 43210"></label>
+          <label class="field full"><span>Location</span><input name="location" placeholder="City, State, Country" value="Sonbhadra, Uttar Pradesh, India"></label>
+          <label class="field full"><span>LinkedIn / Portfolio <small>Optional</small></span><input name="website" placeholder="linkedin.com/in/yourprofile" value=""></label>
+          <div class="field full photo-field">
+            <span>Profile photo <small>Shown on the Sidebar template</small></span>
+            <div class="photo-upload-control">
+              <img id="photoEditorPreview" class="photo-editor-preview" alt="" hidden>
+              <label class="button button-quiet photo-upload-button" for="photoInput">Choose photo</label>
+              <input id="photoInput" class="photo-file-input" type="file" accept="image/jpeg,image/png,image/webp">
+              <button type="button" class="text-button photo-remove-button" id="removePhoto" hidden>Remove photo</button>
+            </div>
+            <small class="field-help">JPG, PNG, or WebP · up to 10 MB</small>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+        <div class="section-heading">
+          <div><span class="section-number">02</span><input class="section-title-input" type="text" data-section-name="summary" value="Professional summary" aria-label="Professional summary section name"></div>
+        </div>
+        <label class="field full"><span>About you</span><textarea name="summary" rows="4" placeholder="Write 2–4 sentences about your experience, strengths and goals.">Motivated civil engineering student with a strong interest in building planning, AutoCAD drafting, and modern construction technology. Eager to apply technical knowledge, learn from experienced professionals, and contribute to practical engineering projects.</textarea><small class="field-help">Tip: Focus on your strengths and the value you bring.</small></label>
+
+        <div class="form-divider"></div>
+        <div class="section-heading">
+          <div><span class="section-number">03</span><input class="section-title-input" type="text" data-section-name="education" value="Education" aria-label="Education section name"></div>
+          <button class="text-button" type="button" id="addEducation">+ Add education</button>
+        </div>
+        <div id="educationList" class="repeat-list"></div>
+
+        <div class="form-divider"></div>
+        <div class="section-heading">
+          <div><span class="section-number">04</span><input class="section-title-input" type="text" data-section-name="experience" value="Experience" aria-label="Experience section name"></div>
+          <button class="text-button" type="button" id="addExperience">+ Add experience</button>
+        </div>
+        <div id="experienceList" class="repeat-list"></div>
+
+        <div class="form-divider"></div>
+        <div class="section-heading">
+          <div><span class="section-number">05</span><input class="section-title-input" type="text" data-section-name="skills" value="Skills" aria-label="Skills section name"></div>
+        </div>
+        <div class="form-grid">
+          <label class="field full">
+            <span>Section title</span>
+            <input class="section-title-input minor" type="text" data-section-name="technicalSkills" value="Technical skills" aria-label="Technical skills section name">
+          </label>
+          <label class="field full">
+            <span>Technical skills</span>
+            <div class="tag-editor" data-tag-group="technicalSkills">
+              <div class="tag-list" id="technicalSkillsList"></div>
+              <div class="tag-input-row">
+                <input type="text" data-tag-input="technicalSkills" placeholder="Add a technical skill">
+                <button type="button" class="button button-quiet" data-tag-add="technicalSkills">Add</button>
+              </div>
+            </div>
+            <textarea name="technicalSkills" rows="3" class="hidden-tag-value">AutoCAD, Building Planning, Technical Drawing, MS Excel</textarea>
+            <small class="field-help">Add or remove custom skills as needed.</small>
+          </label>
+          <label class="field full">
+            <span>Section title</span>
+            <input class="section-title-input minor" type="text" data-section-name="softSkills" value="Soft skills" aria-label="Soft skills section name">
+          </label>
+          <label class="field full">
+            <span>Soft skills</span>
+            <div class="tag-editor" data-tag-group="softSkills">
+              <div class="tag-list" id="softSkillsList"></div>
+              <div class="tag-input-row">
+                <input type="text" data-tag-input="softSkills" placeholder="Add a soft skill">
+                <button type="button" class="button button-quiet" data-tag-add="softSkills">Add</button>
+              </div>
+            </div>
+            <textarea name="softSkills" rows="3" class="hidden-tag-value">Teamwork, Problem Solving, Communication</textarea>
+            <small class="field-help">Add or remove custom skills as needed.</small>
+          </label>
+        </div>
+
+        <div class="form-divider"></div>
+        <div class="section-heading">
+          <div><span class="section-number">06</span><input class="section-title-input" type="text" data-section-name="hobbies" value="Hobbies" aria-label="Hobbies section name"></div>
+        </div>
+        <label class="field full">
+          <span>Section title</span>
+          <input class="section-title-input minor" type="text" data-section-name="hobbiesField" value="Hobbies / interests" aria-label="Hobbies field label">
+        </label>
+        <label class="field full">
+          <span>Hobbies / interests</span>
+          <div class="tag-editor" data-tag-group="hobbies">
+            <div class="tag-list" id="hobbiesList"></div>
+            <div class="tag-input-row">
+              <input type="text" data-tag-input="hobbies" placeholder="Add a hobby">
+              <button type="button" class="button button-quiet" data-tag-add="hobbies">Add</button>
+            </div>
+          </div>
+          <textarea name="hobbies" rows="3" class="hidden-tag-value">Reading, Travel, Photography</textarea>
+          <small class="field-help">Add or remove custom hobbies as needed.</small>
+        </label>
+
+        <div class="form-divider"></div>
+        <div class="section-heading">
+          <div><span class="section-number">07</span><input class="section-title-input" type="text" data-section-name="projects" value="Projects" aria-label="Projects section name"></div>
+          <button class="text-button" type="button" id="addProject">+ Add project</button>        </div>
+        <div id="projectList" class="repeat-list"></div>
+
+        <div class="form-divider"></div>
+        <div class="section-heading">
+          <div><span class="section-number">08</span><input class="section-title-input" type="text" data-section-name="certifications" value="Certifications" aria-label="Certifications section name"></div>
+          <button class="text-button" type="button" id="addCertification">+ Add certification</button>
+        </div>
+        <div id="certificationList" class="repeat-list"></div>
+
+        <div class="form-divider"></div>
+        <div class="section-heading">
+          <div><span class="section-number">09</span><input class="section-title-input" type="text" data-section-name="customSections" value="Custom sections" aria-label="Custom sections section name"></div>
+          <button class="text-button" type="button" id="addCustomSection">+ Add section</button>
+        </div>
+        <p class="section-help">Add sections such as Awards, Languages, or Volunteer work.</p>
+        <div id="customSectionList" class="repeat-list"></div>
+
+        <div class="form-divider"></div>
+        <div class="section-heading">
+          <div><span class="section-number">10</span><input class="section-title-input" type="text" data-section-name="design" value="Customize design" aria-label="Customize design section name"></div>
+        </div>
+        <div class="customize-grid">
+          <label class="field"><span>Template</span><select id="templateSelect"><option value="modern">Modern</option><option value="classic">Classic</option><option value="minimal">Minimal</option><option value="executive">Executive</option><option value="sidebar">Sidebar</option><option value="editorial">Editorial</option></select></label>
+          <label class="field"><span>Accent color</span><div class="color-control"><input type="color" id="accentColor" value="#5865e8"><span id="colorHex">#5865E8</span></div></label>
+        </div>
+        <div class="editor-actions">
+          <button type="button" class="button button-quiet" id="resetButton">Reset sample</button>
+          <button type="button" class="button button-quiet" id="exportWordBottom">Export Word</button>
+          <button type="button" class="button button-primary" id="downloadBottom">Download PDF <span aria-hidden="true">↗</span></button>
+        </div>
+      </form>
+      <p class="privacy-note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Your resume details are saved in this browser on this device.</p>
+    </section>
+
+    <section class="preview-panel" aria-label="Live resume preview">
+      <div class="preview-toolbar">
+        <div class="preview-title"><span class="live-dot"></span><div><strong>Live preview</strong><small>Your resume, in real time</small></div></div>
+        <div class="preview-tools">
+          <span class="page-indicator">A4 · 1 page preview</span>
+          <button class="icon-button" id="zoomOut" aria-label="Zoom out" title="Zoom out">−</button>
+          <span id="zoomLabel">100%</span>
+          <button class="icon-button" id="zoomIn" aria-label="Zoom in" title="Zoom in">+</button>
+        </div>
+      </div>
+      <div class="paper-stage" id="paperStage">
+        <article class="resume-paper template-modern" id="resumePaper" aria-label="Resume document">
+          <div class="resume-header">
+            <div class="resume-name-block"><img id="previewPhoto" class="resume-photo" alt="" hidden><div class="resume-name-copy"><h1 id="previewName">Awdhesh Kumar</h1><p id="previewTitle">Job Title</p></div></div>
+            <div class="resume-contact" id="previewContact"></div>
+          </div>
+          <div class="resume-body">
+            <section class="resume-section" id="summarySection"><h2>Profile</h2><p id="previewSummary"></p></section>
+            <section class="resume-section" id="educationSection"><h2>Education</h2><div id="previewEducation"></div></section>
+            <section class="resume-section" id="experienceSection"><h2>Experience</h2><div id="previewExperience"></div></section>
+            <section class="resume-section" id="technicalSkillsSection"><h2>Technical skills</h2><div class="skill-list" id="previewTechnicalSkills"></div></section>
+            <section class="resume-section" id="softSkillsSection"><h2>Soft skills</h2><div class="skill-list" id="previewSoftSkills"></div></section>
+            <section class="resume-section" id="hobbiesSection"><h2>Hobbies</h2><div class="skill-list" id="previewHobbies"></div></section>
+            <section class="resume-section" id="certificationsSection"><h2>Certifications</h2><div id="previewCertifications"></div></section>
+            <section class="resume-section" id="projectsSection"><h2>Projects</h2><div id="previewProjects"></div></section>
+            <div id="customSectionsPreview" class="custom-sections-preview"></div>
+          </div>
+        </article>
+      </div>
+      <div class="preview-footnote"><span class="footnote-icon">✦</span><span><strong>Looking good.</strong> Keep your resume clear, relevant, and tailored to the role.</span></div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
