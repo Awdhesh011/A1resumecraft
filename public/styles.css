@@ -516,8 +516,8 @@ button { cursor: pointer; }
       "summary summary"
       "technicalSkills experience"
       "softSkills education"
-      "hobbies projects"
-      "certifications certifications"
+      "certifications projects"
+      "hobbies hobbies"
       "custom custom";
     gap: 0 25px;
     align-content: start;
@@ -634,3 +634,80 @@ button { cursor: pointer; }
     }
     .template-editorial { background-position: 15mm 9mm; }
   }
+}
+
+.template-two-column .resume-header {
+  align-items: center;
+  border-bottom: 1px solid #e2e6ef;
+  padding-bottom: 20px;
+}
+.template-two-column .resume-name-block {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.template-two-column .resume-name-copy { min-width: 0; }
+.template-two-column .resume-photo:not([hidden]) {
+  display: block;
+  flex: 0 0 62px;
+  width: 62px;
+  height: 62px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 9px rgba(28, 39, 66, .18);
+}
+.template-two-column .resume-body {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.45fr);
+  grid-template-areas:
+    "summary experience"
+    "technicalSkills education"
+    "softSkills projects"
+    "certifications projects"
+    "hobbies hobbies"
+    "custom custom";
+  gap: 0 24px;
+  align-content: start;
+  background: linear-gradient(90deg, #f3f5fa 0 36%, transparent 36%);
+}
+.template-two-column #summarySection { grid-area: summary; }
+.template-two-column #technicalSkillsSection { grid-area: technicalSkills; }
+.template-two-column #softSkillsSection { grid-area: softSkills; }
+.template-two-column #hobbiesSection { grid-area: hobbies; }
+.template-two-column #experienceSection { grid-area: experience; }
+.template-two-column #educationSection { grid-area: education; }
+.template-two-column #projectsSection { grid-area: projects; }
+.template-two-column #certificationsSection { grid-area: certifications; }
+.template-two-column #customSectionsPreview { grid-area: custom; }
+.template-two-column .resume-section,
+.template-two-column .custom-resume-section { margin-top: 21px; }
+.template-two-column .resume-section h2 { color: #33415e; }
+.template-two-column #summarySection h2,
+.template-two-column #experienceSection h2,
+.template-two-column #projectsSection h2 { color: var(--resume-accent); }
+.template-two-column .skill-list { gap: 5px; }
+.template-two-column .skill-chip {
+  padding: 4px 6px;
+  border-color: #e0e4ed;
+  background: rgba(255, 255, 255, .82);
+  font-size: 7px;
+}
+.template-two-column .custom-resume-section > p { white-space: pre-line; }
+
+@media screen and (max-width: 760px) {
+  .template-two-column .resume-name-block { gap: 9px; }
+  .template-two-column .resume-photo:not([hidden]) {
+    flex-basis: 50px;
+    width: 50px;
+    height: 50px;
+  }
+  .template-two-column .resume-body { gap: 0 15px; }
+}
+
+@media screen and (max-width: 420px) {
+  .template-two-column .resume-body {
+    grid-template-columns: minmax(0, .78fr) minmax(0, 1.35fr);
+    gap: 0 10px;
+  }
+  .template-two-column .resume-section h2 { font-size: 8px; }
