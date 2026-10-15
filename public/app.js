@@ -20,6 +20,7 @@
     skills: "Skills",
     technicalSkills: "Technical skills",
     softSkills: "Soft skills",
+    languages: "Languages",
     hobbies: "Hobbies",
     hobbiesField: "Hobbies / interests",
     projects: "Projects",
@@ -38,6 +39,7 @@
     summary: "",
     technicalSkills: "",
     softSkills: "",
+    languages: "",
     hobbies: "",
     education: [],
     experience: [],
@@ -225,6 +227,7 @@
   function getData() {
     const technicalSkills = getFormValue("technicalSkills");
     const softSkills = getFormValue("softSkills");
+    const languages = getFormValue("languages");
     const hobbies = getFormValue("hobbies");
     return {
       fullName: getFormValue("fullName"),
@@ -236,6 +239,7 @@
       summary: getFormValue("summary"),
       technicalSkills,
       softSkills,
+      languages,
       hobbies,
       skills: [technicalSkills, softSkills].filter(Boolean).join(", "),
       education: readRepeat("education"),
@@ -296,8 +300,12 @@
     }
     $("#previewSummary").textContent = data.summary;
     setSectionVisibility("summarySection", !!data.summary);
-    const contact = [data.email, data.phone, data.location, data.website].filter(Boolean);
+    const contactDetails = data.template === "peach"
+      ? [data.phone, data.email, data.location, data.website]
+      : [data.email, data.phone, data.location, data.website];
+    const contact = contactDetails.filter(Boolean);
     $("#previewContact").innerHTML = contact.map(item => `<span>${escapeHTML(item)}</span>`).join("");
+    $("#previewContact").hidden = contact.length === 0;
     $("#previewEducation").innerHTML = renderEntries(data.education, "education");
     $("#previewExperience").innerHTML = renderEntries(data.experience, "experience");
     $("#previewProjects").innerHTML = renderEntries(data.projects, "project");
@@ -320,15 +328,24 @@
     $("#previewSoftSkills").innerHTML = softSkills.map(skill => `<span class="skill-chip">${escapeHTML(skill)}</span>`).join("");
     setSectionVisibility("softSkillsSection", softSkills.length > 0);
 
+    const languages = parseSkills(data.languages || "");
+    $("#previewLanguages").innerHTML = languages.map(language => `<span class="skill-chip">${escapeHTML(language)}</span>`).join("");
+    setSectionVisibility("languagesSection", languages.length > 0);
+
     const hobbies = parseSkills(data.hobbies || "");
     $("#previewHobbies").innerHTML = hobbies.map(item => `<span class="skill-chip">${escapeHTML(item)}</span>`).join("");
     setSectionVisibility("hobbiesSection", hobbies.length > 0);
 
-    $("#summarySection h2").textContent = sectionNames.profile || DEFAULT_SECTION_NAMES.profile;
+    $("#summarySection h2").textContent = data.template === "peach" && sectionNames.profile === DEFAULT_SECTION_NAMES.profile
+      ? "Career Objective"
+      : sectionNames.profile || DEFAULT_SECTION_NAMES.profile;
     $("#educationSection h2").textContent = sectionNames.education || DEFAULT_SECTION_NAMES.education;
     $("#experienceSection h2").textContent = sectionNames.experience || DEFAULT_SECTION_NAMES.experience;
     $("#technicalSkillsSection h2").textContent = sectionNames.technicalSkills || DEFAULT_SECTION_NAMES.technicalSkills;
-    $("#softSkillsSection h2").textContent = sectionNames.softSkills || DEFAULT_SECTION_NAMES.softSkills;
+    $("#softSkillsSection h2").textContent = data.template === "peach" && sectionNames.softSkills === DEFAULT_SECTION_NAMES.softSkills
+      ? "Personal Skills"
+      : sectionNames.softSkills || DEFAULT_SECTION_NAMES.softSkills;
+    $("#languagesSection h2").textContent = sectionNames.languages || DEFAULT_SECTION_NAMES.languages;
     $("#hobbiesSection h2").textContent = sectionNames.hobbies || DEFAULT_SECTION_NAMES.hobbies;
     $("#projectsSection h2").textContent = sectionNames.projects || DEFAULT_SECTION_NAMES.projects;
     $("#certificationsSection h2").textContent = sectionNames.certifications || DEFAULT_SECTION_NAMES.certifications;
@@ -340,7 +357,7 @@
     const checks = [
       !!data.fullName, !!data.jobTitle, !!data.email || !!data.phone, !!data.summary,
       data.education.some(item => item.degree || item.school), !!(data.technicalSkills || data.softSkills || data.skills),
-      data.experience.some(item => item.role || item.company), !!data.hobbies,
+      data.experience.some(item => item.role || item.company), !!data.languages, !!data.hobbies,
       data.projects.some(item => item.name)
     ];
     if (data.certifications.some(item => Object.values(item).some(Boolean))) {
@@ -368,14 +385,14 @@
   }
 
   function refresh() {
-    ["technicalSkills", "softSkills", "hobbies"].forEach(syncTagGroup);
+    ["technicalSkills", "softSkills", "languages", "hobbies"].forEach(syncTagGroup);
     const data = getData();
     renderPreview(data);
     saveData();
   }
 
   function populateForm(data) {
-    ["fullName", "jobTitle", "email", "phone", "location", "website", "summary", "technicalSkills", "softSkills", "hobbies"].forEach(name => {
+    ["fullName", "jobTitle", "email", "phone", "location", "website", "summary", "technicalSkills", "softSkills", "languages", "hobbies"].forEach(name => {
       if (form.elements.namedItem(name)) form.elements.namedItem(name).value = data[name] ?? "";
     });
     const sectionNames = { ...DEFAULT_SECTION_NAMES, ...(data.sectionNames || {}) };
@@ -391,7 +408,7 @@
     photoData = typeof data.photoData === "string" &&
       /^data:image\/jpeg;base64,[A-Za-z0-9+/]+=*$/.test(data.photoData) ? data.photoData : "";
     $("#photoInput").value = "";
-    ["technicalSkills", "softSkills", "hobbies"].forEach(syncTagGroup);
+    ["technicalSkills", "softSkills", "languages", "hobbies"].forEach(syncTagGroup);
     renderRepeatList("education", Array.isArray(data.education) ? data.education : []);
     renderRepeatList("experience", Array.isArray(data.experience) ? data.experience : []);
     renderRepeatList("project", Array.isArray(data.projects) ? data.projects : []);
@@ -457,6 +474,7 @@
 
     const technicalSkills = parseSkills(data.technicalSkills || data.skills || "");
     const softSkills = parseSkills(data.softSkills || "");
+    const languages = parseSkills(data.languages || "");
     const hobbies = parseSkills(data.hobbies || "");
     const education = (data.education || []).filter(item => Object.values(item).some(Boolean));
     const experience = (data.experience || []).filter(item => Object.values(item).some(Boolean));
@@ -510,6 +528,7 @@
 
     addSection(sectionNames.technicalSkills || DEFAULT_SECTION_NAMES.technicalSkills, technicalSkills);
     addSection(sectionNames.softSkills || DEFAULT_SECTION_NAMES.softSkills, softSkills);
+    addSection(sectionNames.languages || DEFAULT_SECTION_NAMES.languages, languages);
     addSection(sectionNames.hobbies || DEFAULT_SECTION_NAMES.hobbies, hobbies);
 
     return `<!DOCTYPE html>
@@ -538,6 +557,7 @@
         ${experienceHtml ? `<section><h2>${escapeHTML(sectionNames.experience || DEFAULT_SECTION_NAMES.experience)}</h2>${experienceHtml}</section>` : ""}
         ${technicalSkills.length ? `<section><h2>${escapeHTML(sectionNames.technicalSkills || DEFAULT_SECTION_NAMES.technicalSkills)}</h2><ul>${technicalSkills.map(skill => `<li>${escapeHTML(skill)}</li>`).join("")}</ul></section>` : ""}
         ${softSkills.length ? `<section><h2>${escapeHTML(sectionNames.softSkills || DEFAULT_SECTION_NAMES.softSkills)}</h2><ul>${softSkills.map(skill => `<li>${escapeHTML(skill)}</li>`).join("")}</ul></section>` : ""}
+        ${languages.length ? `<section><h2>${escapeHTML(sectionNames.languages || DEFAULT_SECTION_NAMES.languages)}</h2><ul>${languages.map(language => `<li>${escapeHTML(language)}</li>`).join("")}</ul></section>` : ""}
         ${hobbies.length ? `<section><h2>${escapeHTML(sectionNames.hobbies || DEFAULT_SECTION_NAMES.hobbies)}</h2><ul>${hobbies.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>` : ""}
         ${certificationsHtml ? `<section><h2>${escapeHTML(sectionNames.certifications || DEFAULT_SECTION_NAMES.certifications)}</h2>${certificationsHtml}</section>` : ""}
         ${projectsHtml ? `<section><h2>${escapeHTML(sectionNames.projects || DEFAULT_SECTION_NAMES.projects)}</h2>${projectsHtml}</section>` : ""}

@@ -51,7 +51,7 @@
           <label class="field full"><span>Location</span><input name="location" placeholder="City, State, Country"></label>
           <label class="field full"><span>LinkedIn / Portfolio <small>Optional</small></span><input name="website" placeholder="linkedin.com/in/yourprofile" value=""></label>
           <div class="field full photo-field">
-            <span>Profile photo <small>Shown on the Sidebar and Two-column templates</small></span>
+            <span>Profile photo <small>Shown on the Sidebar, Two-column, and Peach templates</small></span>
             <div class="photo-upload-control">
               <img id="photoEditorPreview" class="photo-editor-preview" alt="" hidden>
               <label class="button button-quiet photo-upload-button" for="photoInput">Choose photo</label>
@@ -123,7 +123,24 @@
 
         <div class="form-divider"></div>
         <div class="section-heading">
-          <div><span class="section-number">06</span><input class="section-title-input" type="text" data-section-name="hobbies" value="Hobbies" aria-label="Hobbies section name"></div>
+          <div><span class="section-number">06</span><input class="section-title-input" type="text" data-section-name="languages" value="Languages" aria-label="Languages section name"></div>
+        </div>
+        <label class="field full">
+          <span>Languages</span>
+          <div class="tag-editor" data-tag-group="languages">
+            <div class="tag-list" id="languagesList"></div>
+            <div class="tag-input-row">
+              <input type="text" data-tag-input="languages" placeholder="Add a language">
+              <button type="button" class="button button-quiet" data-tag-add="languages">Add</button>
+            </div>
+          </div>
+          <textarea name="languages" rows="3" class="hidden-tag-value"></textarea>
+          <small class="field-help">Add each language separately.</small>
+        </label>
+
+        <div class="form-divider"></div>
+        <div class="section-heading">
+          <div><span class="section-number">07</span><input class="section-title-input" type="text" data-section-name="hobbies" value="Hobbies" aria-label="Hobbies section name"></div>
         </div>
         <label class="field full">
           <span>Section title</span>
@@ -144,20 +161,20 @@
 
         <div class="form-divider"></div>
         <div class="section-heading">
-          <div><span class="section-number">07</span><input class="section-title-input" type="text" data-section-name="projects" value="Projects" aria-label="Projects section name"></div>
+          <div><span class="section-number">08</span><input class="section-title-input" type="text" data-section-name="projects" value="Projects" aria-label="Projects section name"></div>
           <button class="text-button" type="button" id="addProject">+ Add project</button>        </div>
         <div id="projectList" class="repeat-list"></div>
 
         <div class="form-divider"></div>
         <div class="section-heading">
-          <div><span class="section-number">08</span><input class="section-title-input" type="text" data-section-name="certifications" value="Certifications" aria-label="Certifications section name"></div>
+          <div><span class="section-number">09</span><input class="section-title-input" type="text" data-section-name="certifications" value="Certifications" aria-label="Certifications section name"></div>
           <button class="text-button" type="button" id="addCertification">+ Add certification</button>
         </div>
         <div id="certificationList" class="repeat-list"></div>
 
         <div class="form-divider"></div>
         <div class="section-heading">
-          <div><span class="section-number">09</span><input class="section-title-input" type="text" data-section-name="customSections" value="Custom sections" aria-label="Custom sections section name"></div>
+          <div><span class="section-number">10</span><input class="section-title-input" type="text" data-section-name="customSections" value="Custom sections" aria-label="Custom sections section name"></div>
           <button class="text-button" type="button" id="addCustomSection">+ Add section</button>
         </div>
         <p class="section-help">Add sections such as Awards, Languages, or Volunteer work.</p>
@@ -165,10 +182,10 @@
 
         <div class="form-divider"></div>
         <div class="section-heading">
-          <div><span class="section-number">10</span><input class="section-title-input" type="text" data-section-name="design" value="Customize design" aria-label="Customize design section name"></div>
+          <div><span class="section-number">11</span><input class="section-title-input" type="text" data-section-name="design" value="Customize design" aria-label="Customize design section name"></div>
         </div>
         <div class="customize-grid">
-          <label class="field"><span>Template</span><select id="templateSelect"><option value="modern">Modern</option><option value="classic">Classic</option><option value="minimal">Minimal</option><option value="executive">Executive</option><option value="sidebar">Sidebar</option><option value="two-column">Two-column</option><option value="editorial">Editorial</option></select></label>
+          <label class="field"><span>Template</span><select id="templateSelect"><option value="modern">Modern</option><option value="classic">Classic</option><option value="minimal">Minimal</option><option value="executive">Executive</option><option value="sidebar">Sidebar</option><option value="two-column">Two-column</option><option value="peach">Peach</option><option value="editorial">Editorial</option></select></label>
           <label class="field"><span>Accent color</span><div class="color-control"><input type="color" id="accentColor" value="#5865e8"><span id="colorHex">#5865E8</span></div></label>
         </div>
         <div class="editor-actions">
@@ -202,6 +219,7 @@
             <section class="resume-section" id="experienceSection"><h2>Experience</h2><div id="previewExperience"></div></section>
             <section class="resume-section" id="technicalSkillsSection"><h2>Technical skills</h2><div class="skill-list" id="previewTechnicalSkills"></div></section>
             <section class="resume-section" id="softSkillsSection"><h2>Soft skills</h2><div class="skill-list" id="previewSoftSkills"></div></section>
+            <section class="resume-section" id="languagesSection"><h2>Languages</h2><div class="skill-list" id="previewLanguages"></div></section>
             <section class="resume-section" id="certificationsSection"><h2>Certifications</h2><div id="previewCertifications"></div></section>
             <section class="resume-section" id="hobbiesSection"><h2>Hobbies</h2><div class="skill-list" id="previewHobbies"></div></section>
             <section class="resume-section" id="projectsSection"><h2>Projects</h2><div id="previewProjects"></div></section>

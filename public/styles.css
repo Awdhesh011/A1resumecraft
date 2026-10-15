@@ -711,3 +711,160 @@ button { cursor: pointer; }
     gap: 0 10px;
   }
   .template-two-column .resume-section h2 { font-size: 8px; }
+}
+
+.template-peach {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr);
+    grid-template-rows: 164px repeat(8, auto);
+    grid-template-areas:
+      "photo name"
+      "contact summary"
+      "softSkills education"
+      "languages education"
+      "hobbies technicalSkills"
+      "experience experience"
+      "projects projects"
+      "certifications certifications"
+      "custom custom";
+    align-content: start;
+    gap: 0 25px;
+    overflow: hidden;
+    padding: 25px 34px 32px;
+    background: #f8e7d8;
+    color: #191919;
+  }
+  .template-peach .resume-header,
+  .template-peach .resume-body,
+  .template-peach .resume-name-block { display: contents; }
+  .template-peach .resume-photo:not([hidden]) {
+    display: block;
+    grid-area: photo;
+    align-self: center;
+    justify-self: center;
+    width: 108px;
+    height: 108px;
+    border: 0;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .template-peach .resume-name-copy {
+    grid-area: name;
+    align-self: center;
+    min-width: 0;
+  }
+  .template-peach .resume-name-block h1 {
+    margin: 0;
+    color: #111;
+    font-size: 29px;
+    letter-spacing: -.8px;
+  }
+  .template-peach .resume-name-block p {
+    margin-top: 6px;
+    color: #4c4038;
+  }
+  .template-peach .resume-contact {
+    grid-area: contact;
+    align-self: start;
+    max-width: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+    padding: 0;
+    color: #24201d;
+    font-size: 9px;
+    text-align: left;
+  }
+  .template-peach .resume-contact::before {
+    margin-bottom: 4px;
+    color: #111;
+    content: "Contact";
+    font: 800 13px "Manrope", sans-serif;
+  }
+  #previewContact[hidden] { display: none; }
+  .template-peach .resume-contact span::before {
+    display: inline-block;
+    width: 13px;
+    color: #171717;
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .template-peach .resume-contact span:nth-child(1)::before { content: "☎"; }
+  .template-peach .resume-contact span:nth-child(2)::before { content: "✉"; }
+  .template-peach .resume-contact span:nth-child(3)::before { content: "⌖"; }
+  .template-peach .resume-contact span:nth-child(4)::before { content: "↗"; }
+  .template-peach #summarySection { grid-area: summary; }
+  .template-peach #educationSection { grid-area: education; }
+  .template-peach #experienceSection { grid-area: experience; }
+  .template-peach #technicalSkillsSection { grid-area: technicalSkills; }
+  .template-peach #softSkillsSection { grid-area: softSkills; }
+  .template-peach #languagesSection { grid-area: languages; }
+  .template-peach #hobbiesSection { grid-area: hobbies; }
+  .template-peach #projectsSection { grid-area: projects; }
+  .template-peach #certificationsSection { grid-area: certifications; }
+  .template-peach #customSectionsPreview { grid-area: custom; }
+  .template-peach .resume-section,
+  .template-peach .custom-resume-section { margin-top: 20px; }
+  .template-peach .resume-section h2 {
+    margin-bottom: 9px;
+    color: #171717;
+    font: 800 15px "Manrope", sans-serif;
+    letter-spacing: -.2px;
+    text-transform: none;
+  }
+  .template-peach .resume-section h2::before {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    margin-right: 7px;
+    background: var(--resume-accent);
+    content: "";
+    vertical-align: -2px;
+  }
+  .template-peach #summarySection h2 { color: #171717; }
+  .template-peach .resume-section > p,
+  .template-peach .entry-description { color: #302923; }
+  .template-peach .resume-section > p { font-size: 9.5px; }
+  .template-peach .entry-description { font-size: 9px; }
+  .template-peach .entry-top strong { color: #171717; }
+  .template-peach .entry-subtitle,
+  .template-peach .resume-name-block p { color: #514338; }
+  .template-peach .entry-date { color: #51483f; }
+  .template-peach .skill-list { display: flex; flex-direction: column; gap: 3px; }
+  .template-peach .skill-chip {
+    position: relative;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #24201d;
+    padding: 0 0 0 12px;
+    font-size: 9px;
+    line-height: 1.45;
+  }
+  .template-peach .skill-chip::before {
+    position: absolute;
+    left: 1px;
+    content: "•";
+  }
+
+  @media screen and (max-width: 760px) {
+    .template-peach { gap: 0 16px; padding: 20px 22px 28px; }
+    .template-peach { grid-template-rows: 144px repeat(8, auto); }
+    .template-peach .resume-photo:not([hidden]) { width: 86px; height: 86px; }
+    .template-peach .resume-name-block h1 { font-size: 22px; }
+    .template-peach .resume-section h2 { font-size: 12px; }
+  }
+
+  @media screen and (max-width: 420px) {
+    .template-peach { grid-template-columns: minmax(0, .76fr) minmax(0, 1.24fr); gap: 0 12px; padding-right: 17px; padding-left: 17px; }
+    .template-peach { grid-template-rows: 128px repeat(8, auto); }
+    .template-peach .resume-photo:not([hidden]) { width: 68px; height: 68px; }
+    .template-peach .resume-name-block h1 { font-size: 18px; }
+    .template-peach .resume-name-block p,
+    .template-peach .resume-contact { font-size: 7px; }
+    .template-peach .resume-section h2 { font-size: 10px; }
+    .template-peach .resume-section > p,
+    .template-peach .entry-description,
+    .template-peach .skill-chip { font-size: 8px; }
+  }
