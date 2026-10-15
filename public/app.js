@@ -28,20 +28,20 @@
     design: "Customize design"
   };
 
-  const sample = {
-    fullName: "Awdhesh Kumar",
-    jobTitle: "Civil Engineering Student",
-    email: "awdhesh@example.com",
-    phone: "+91 98765 43210",
-    location: "Sonbhadra, Uttar Pradesh, India",
+  const emptyResume = {
+    fullName: "",
+    jobTitle: "",
+    email: "",
+    phone: "",
+    location: "",
     website: "",
-    summary: "Motivated civil engineering student with a strong interest in building planning, AutoCAD drafting, and modern construction technology. Eager to apply technical knowledge, learn from experienced professionals, and contribute to practical engineering projects.",
-    technicalSkills: "AutoCAD, Building Planning, Technical Drawing, MS Excel",
-    softSkills: "Teamwork, Problem Solving, Communication",
-    hobbies: "Reading, Travel, Photography",
-    education: [{ degree: "Diploma / B.Tech in Civil Engineering", school: "Your College Name", date: "2024 – Present", details: "Relevant coursework: Building Materials, Engineering Drawing, Surveying." }],
-    experience: [{ role: "Student Trainee", company: "Academic / Personal Projects", date: "2025 – Present", details: "Practiced technical drafting and explored digital tools for civil engineering planning." }],
-    projects: [{ name: "Civil-3D-Planner", date: "Personal Project", details: "Developing a web-based concept to turn 2D building layouts into interactive 3D views." }],
+    summary: "",
+    technicalSkills: "",
+    softSkills: "",
+    hobbies: "",
+    education: [],
+    experience: [],
+    projects: [],
     certifications: [],
     customSections: [],
     sectionNames: { ...DEFAULT_SECTION_NAMES },
@@ -49,10 +49,37 @@
     accent: "#5865e8"
   };
 
+  const legacySample = {
+    fullName: "Awdhesh Kumar",
+    jobTitle: "Civil Engineering Student",
+    email: "awdhesh@example.com",
+    location: "Sonbhadra, Uttar Pradesh, India",
+    summary: "Motivated civil engineering student with a strong interest in building planning, AutoCAD drafting, and modern construction technology. Eager to apply technical knowledge, learn from experienced professionals, and contribute to practical engineering projects.",
+    technicalSkills: "AutoCAD, Building Planning, Technical Drawing, MS Excel",
+    softSkills: "Teamwork, Problem Solving, Communication",
+    hobbies: "Reading, Travel, Photography",
+    education: [{ degree: "Diploma / B.Tech in Civil Engineering", school: "Your College Name", date: "2024 – Present", details: "Relevant coursework: Building Materials, Engineering Drawing, Surveying." }],
+    experience: [{ role: "Student Trainee", company: "Academic / Personal Projects", date: "2025 – Present", details: "Practiced technical drafting and explored digital tools for civil engineering planning." }],
+    projects: [{ name: "Civil-3D-Planner", date: "Personal Project", details: "Developing a web-based concept to turn 2D building layouts into interactive 3D views." }],
+    skills: "AutoCAD, Building Planning, Technical Drawing, MS Excel, Teamwork, Problem Solving, Communication"
+  };
+  const legacySamplePhones = ["+91 98765 43210", "+91 0000000000"];
+
   function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, ch => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
     })[ch]);
+  }
+
+  function removeLegacySample(data) {
+    const cleaned = { ...data };
+    Object.entries(legacySample).forEach(([key, value]) => {
+      if (JSON.stringify(cleaned[key]) === JSON.stringify(value)) {
+        cleaned[key] = Array.isArray(value) ? [] : "";
+      }
+    });
+    if (legacySamplePhones.includes(cleaned.phone)) cleaned.phone = "";
+    return cleaned;
   }
 
   function showToast(message) {
@@ -325,7 +352,8 @@
     const percent = Math.round(checks.filter(Boolean).length / checks.length * 100);
     $("#progressPercent").textContent = `${percent}%`;
     $("#progressBar").style.width = `${percent}%`;
-    $("#progressHint").textContent = percent >= 88 ? "Great work — your resume is taking shape!" :
+    $("#progressHint").textContent = percent === 0 ? "Add your details to get started." :
+      percent >= 88 ? "Great work — your resume is taking shape!" :
       percent >= 63 ? "Nice progress. Add any remaining details." :
       "A few details can make a big difference.";
   }
@@ -659,16 +687,17 @@
     $("#zoomLabel").textContent = `${zoom}%`;
   }
   $("#resetButton").addEventListener("click", () => {
-    if (confirm("Reset all fields to the sample resume? Your current edits will be replaced.")) {
-      populateForm(sample);
-      showToast("Sample resume restored.");
+    if (confirm("Clear all resume details? Your current edits will be replaced.")) {
+      populateForm(emptyResume);
+      showToast("Resume cleared.");
     }
   });
 
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    populateForm(saved ? { ...sample, ...JSON.parse(saved) } : sample);
+    const savedData = saved ? removeLegacySample(JSON.parse(saved)) : emptyResume;
+    populateForm({ ...emptyResume, ...savedData });
   } catch {
-    populateForm(sample);
+    populateForm(emptyResume);
   }
 })();

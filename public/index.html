@@ -33,9 +33,9 @@
       </div>
 
       <div class="progress-card">
-        <div class="progress-top"><span>Resume completeness</span><strong id="progressPercent">25%</strong></div>
+        <div class="progress-top"><span>Resume completeness</span><strong id="progressPercent">0%</strong></div>
         <div class="progress-track"><span id="progressBar"></span></div>
-        <p id="progressHint">A few details can make a big difference.</p>
+        <p id="progressHint">Add your details to get started.</p>
       </div>
 
       <div class="section-heading">
@@ -44,11 +44,11 @@
       </div>
       <form id="resumeForm" autocomplete="on">
         <div class="form-grid">
-          <label class="field full"><span>Full name <i>*</i></span><input name="fullName" placeholder="e.g. Awdhesh Kumar" value="Awdhesh Kumar" required></label>
-          <label class="field full"><span>Professional title</span><input name="jobTitle" placeholder="e.g. Job Title" value="Job Title"></label>
-          <label class="field"><span>Email address</span><input name="email" type="email" placeholder="you@example.com" value="awdhesh@example.com"></label>
-          <label class="field"><span>Phone number</span><input name="phone" type="tel" placeholder="+91 0000000000" value="+91 0000000000"></label>
-          <label class="field full"><span>Location</span><input name="location" placeholder="City, State, Country" value="Sonbhadra, Uttar Pradesh, India"></label>
+          <label class="field full"><span>Full name <i>*</i></span><input name="fullName" placeholder="Enter your full name" required></label>
+          <label class="field full"><span>Professional title</span><input name="jobTitle" placeholder="e.g. Product Designer"></label>
+          <label class="field"><span>Email address</span><input name="email" type="email" placeholder="name@example.com"></label>
+          <label class="field"><span>Phone number</span><input name="phone" type="tel" placeholder="Enter phone number"></label>
+          <label class="field full"><span>Location</span><input name="location" placeholder="City, State, Country"></label>
           <label class="field full"><span>LinkedIn / Portfolio <small>Optional</small></span><input name="website" placeholder="linkedin.com/in/yourprofile" value=""></label>
           <div class="field full photo-field">
             <span>Profile photo <small>Shown on the Sidebar template</small></span>
@@ -66,7 +66,7 @@
         <div class="section-heading">
           <div><span class="section-number">02</span><input class="section-title-input" type="text" data-section-name="summary" value="Professional summary" aria-label="Professional summary section name"></div>
         </div>
-        <label class="field full"><span>About you</span><textarea name="summary" rows="4" placeholder="Write 2–4 sentences about your experience, strengths and goals.">Motivated civil engineering student with a strong interest in building planning, AutoCAD drafting, and modern construction technology. Eager to apply technical knowledge, learn from experienced professionals, and contribute to practical engineering projects.</textarea><small class="field-help">Tip: Focus on your strengths and the value you bring.</small></label>
+        <label class="field full"><span>About you</span>        <textarea name="summary" rows="4" placeholder="Write 2–4 sentences about your experience, strengths and goals."></textarea><small class="field-help">Tip: Focus on your strengths and the value you bring.</small></label>
 
         <div class="form-divider"></div>
         <div class="section-heading">
@@ -100,7 +100,7 @@
                 <button type="button" class="button button-quiet" data-tag-add="technicalSkills">Add</button>
               </div>
             </div>
-            <textarea name="technicalSkills" rows="3" class="hidden-tag-value">AutoCAD, Building Planning, Technical Drawing, MS Excel</textarea>
+            <textarea name="technicalSkills" rows="3" class="hidden-tag-value"></textarea>
             <small class="field-help">Add or remove custom skills as needed.</small>
           </label>
           <label class="field full">
@@ -116,7 +116,7 @@
                 <button type="button" class="button button-quiet" data-tag-add="softSkills">Add</button>
               </div>
             </div>
-            <textarea name="softSkills" rows="3" class="hidden-tag-value">Teamwork, Problem Solving, Communication</textarea>
+            <textarea name="softSkills" rows="3" class="hidden-tag-value"></textarea>
             <small class="field-help">Add or remove custom skills as needed.</small>
           </label>
         </div>
@@ -138,7 +138,7 @@
               <button type="button" class="button button-quiet" data-tag-add="hobbies">Add</button>
             </div>
           </div>
-          <textarea name="hobbies" rows="3" class="hidden-tag-value">Reading, Travel, Photography</textarea>
+          <textarea name="hobbies" rows="3" class="hidden-tag-value"></textarea>
           <small class="field-help">Add or remove custom hobbies as needed.</small>
         </label>
 
@@ -172,7 +172,7 @@
           <label class="field"><span>Accent color</span><div class="color-control"><input type="color" id="accentColor" value="#5865e8"><span id="colorHex">#5865E8</span></div></label>
         </div>
         <div class="editor-actions">
-          <button type="button" class="button button-quiet" id="resetButton">Reset sample</button>
+          <button type="button" class="button button-quiet" id="resetButton">Clear resume</button>
           <button type="button" class="button button-quiet" id="exportWordBottom">Export Word</button>
           <button type="button" class="button button-primary" id="downloadBottom">Download PDF <span aria-hidden="true">↗</span></button>
         </div>
@@ -193,7 +193,7 @@
       <div class="paper-stage" id="paperStage">
         <article class="resume-paper template-modern" id="resumePaper" aria-label="Resume document">
           <div class="resume-header">
-            <div class="resume-name-block"><img id="previewPhoto" class="resume-photo" alt="" hidden><div class="resume-name-copy"><h1 id="previewName">Awdhesh Kumar</h1><p id="previewTitle">Job Title</p></div></div>
+            <div class="resume-name-block"><img id="previewPhoto" class="resume-photo" alt="" hidden><div class="resume-name-copy"><h1 id="previewName">Your Name</h1><p id="previewTitle">Professional Title</p></div></div>
             <div class="resume-contact" id="previewContact"></div>
           </div>
           <div class="resume-body">

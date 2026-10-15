@@ -41,7 +41,7 @@ button { cursor: pointer; }
 .progress-top { display: flex; align-items: center; justify-content: space-between; color: #5f687c; font-size: 11px; }
 .progress-top strong { color: var(--accent); font-size: 12px; }
 .progress-track { height: 5px; background: #eceef7; border-radius: 5px; overflow: hidden; margin: 11px 0 9px; }
-.progress-track span { display: block; height: 100%; width: 25%; border-radius: 5px; background: linear-gradient(90deg, var(--accent), #9a8cff); transition: width .25s; }
+.progress-track span { display: block; height: 100%; width: 0; border-radius: 5px; background: linear-gradient(90deg, var(--accent), #9a8cff); transition: width .25s; }
 .progress-card p { margin: 0; color: #9aa1b0; font-size: 10px; }
 .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .section-heading > div { display: flex; align-items: center; gap: 10px; }
