@@ -191,11 +191,11 @@ button { cursor: pointer; }
   .editor-actions .button { padding: 0 11px; font-size: 11px; }
 }
 @media print {
-  @page { size: A4; margin: 0; }
+  @page { size: A4 portrait; margin: 0; }
   html, body { width: 210mm; min-height: 297mm; margin: 0 !important; background: #fff !important; }
   body * { visibility: hidden !important; }
   #resumePaper, #resumePaper * { visibility: visible !important; }
-  #resumePaper { position: absolute !important; left: 0 !important; top: 0 !important; width: 210mm !important; max-width: none !important; min-height: 297mm !important; margin: 0 !important; padding: 15mm 15mm 10mm !important; box-shadow: none !important; transform: none !important; }
+  #resumePaper { position: absolute !important; left: 0 !important; top: 0 !important; width: calc(210mm / var(--resume-fit-scale)) !important; max-width: none !important; min-height: calc(297mm / var(--resume-fit-scale)) !important; margin: 0 !important; padding: 15mm 15mm 10mm !important; box-shadow: none !important; transform: none !important; }
   .resume-section, .resume-entry { break-inside: avoid; }
   .resume-paper { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 }
@@ -427,6 +427,7 @@ button { cursor: pointer; }
       animation-iteration-count: 1 !important;
     }
   }
+
 }
 }
 
@@ -868,3 +869,174 @@ button { cursor: pointer; }
     .template-peach .entry-description,
     .template-peach .skill-chip { font-size: 8px; }
   }
+
+.resume-paper {
+  min-height: 0;
+  aspect-ratio: 210 / 297;
+}
+.resume-paper .skill-list {
+  display: block;
+  list-style: disc;
+  margin: 0;
+  padding: 0 0 0 13px;
+}
+.resume-paper .skill-list > li {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 10pt;
+  line-height: 1.55;
+  break-inside: avoid;
+}
+.template-professional {
+  padding: 15mm;
+  background: #fff;
+  color: #222;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.template-professional .resume-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #555;
+  text-align: left;
+}
+.template-professional .resume-name-block { text-align: left; }
+.template-professional .resume-name-block h1 {
+  margin-bottom: 3px;
+  color: #111;
+  font: 700 23pt/1.1 Arial, Helvetica, sans-serif;
+  letter-spacing: 0;
+}
+.template-professional .resume-name-block p {
+  color: #333;
+  font-size: 10pt;
+  font-weight: 400;
+}
+.template-professional .resume-contact {
+  max-width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 2px 10px;
+  padding: 0;
+  color: #333;
+  font-size: 9pt;
+  text-align: left;
+}
+.template-professional .resume-section { margin-top: 10pt; }
+.template-professional .resume-section h2 {
+  margin-bottom: 5pt;
+  padding-bottom: 3pt;
+  border-bottom: 1px solid #777;
+  color: #111;
+  font: 700 11pt/1.2 Arial, Helvetica, sans-serif;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.template-professional .resume-section > p,
+.template-professional .entry-description {
+  color: #222;
+  font-size: 10pt;
+  line-height: 1.4;
+}
+.template-professional .entry-top strong,
+.template-professional .entry-subtitle,
+.template-professional .entry-date { color: #222; }
+.template-professional .entry-top strong,
+.template-professional .entry-subtitle { font-size: 10pt; }
+.template-professional .entry-date,
+.template-professional .skill-list > li { font-size: 10pt; }
+.template-professional .entry-subtitle { font-weight: 400; }
+.template-professional .resume-entry { margin-bottom: 7pt; }
+.template-professional .resume-body {
+  display: flex;
+  flex-direction: column;
+}
+.template-professional #summarySection { order: 1; }
+.template-professional #experienceSection { order: 2; }
+.template-professional #educationSection { order: 3; }
+.template-professional #technicalSkillsSection { order: 4; }
+.template-professional #projectsSection { order: 5; }
+.template-professional #certificationsSection { order: 6; }
+.template-professional #softSkillsSection { order: 7; }
+.template-professional #languagesSection { order: 8; }
+.template-professional #hobbiesSection { order: 9; }
+.template-professional #customSectionsPreview { order: 10; }
+.template-professional .custom-resume-section { margin-top: 10pt; }
+@media print {
+  .template-professional { padding: 15mm !important; }
+  .template-professional .resume-section,
+  .template-professional .resume-entry { break-inside: avoid; }
+}
+
+#resumePaper,
+#resumePaper * {
+  font-family: Arial, Helvetica, sans-serif !important;
+  letter-spacing: normal !important;
+}
+#resumePaper {
+  --resume-fit-scale: 1;
+  font-size: 10pt;
+  line-height: 1.4;
+  width: calc(100% / var(--resume-fit-scale));
+  max-width: calc(595px / var(--resume-fit-scale));
+  zoom: var(--resume-fit-scale);
+}
+#resumePaper .resume-header {
+  padding-bottom: 10px;
+}
+#resumePaper .resume-section {
+  margin-top: 7px;
+}
+#resumePaper .resume-section h2 {
+  margin-bottom: 3px;
+  padding-bottom: 1px;
+}
+#resumePaper .resume-entry {
+  margin-bottom: 4px;
+}
+#resumePaper .entry-subtitle {
+  margin: 0 0 2px;
+}
+#resumePaper .resume-section > p,
+#resumePaper .entry-description,
+#resumePaper .custom-resume-section > p,
+#resumePaper .skill-list > li,
+#resumePaper .entry-top,
+#resumePaper .entry-subtitle {
+  line-height: 1.2;
+}
+#resumePaper .resume-name-block h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  line-height: 1.15;
+  text-transform: none;
+}
+#resumePaper .resume-name-block p,
+#resumePaper .entry-top strong,
+#resumePaper .entry-subtitle {
+  font-size: 10pt;
+  line-height: 1.35;
+}
+#resumePaper .resume-contact,
+#resumePaper .resume-contact span,
+#resumePaper .entry-date {
+  font-size: 9pt;
+  line-height: 1.35;
+}
+#resumePaper .resume-section h2 {
+  font-size: 11pt;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: none;
+}
+#resumePaper .resume-section > p,
+#resumePaper .entry-description,
+#resumePaper .custom-resume-section > p,
+#resumePaper .skill-list > li {
+  font-size: 10pt;
+  line-height: 1.4;
+}

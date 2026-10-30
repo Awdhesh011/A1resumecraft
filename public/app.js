@@ -7,6 +7,7 @@
   const form = $("#resumeForm");
   const toast = $("#toast");
   let zoom = 100;
+  let fitFrame = 0;
   let toastTimer;
   let photoData = "";
   let photoLoadId = 0;
@@ -278,6 +279,13 @@
     $(`#${id}`).hidden = !visible;
   }
 
+  function getSummaryHeading(template, sectionNames) {
+    if (sectionNames.profile !== DEFAULT_SECTION_NAMES.profile) return sectionNames.profile;
+    if (template === "peach") return "Career Objective";
+    if (template === "professional") return "Professional Summary";
+    return DEFAULT_SECTION_NAMES.profile;
+  }
+
   function renderPreview(data) {
     const sectionNames = { ...DEFAULT_SECTION_NAMES, ...(data.sectionNames || {}) };
     const paper = $("#resumePaper");
@@ -321,24 +329,22 @@
     setSectionVisibility("certificationsSection", data.certifications.some(item => Object.values(item).some(Boolean)));
 
     const technicalSkills = parseSkills(data.technicalSkills || data.skills || "");
-    $("#previewTechnicalSkills").innerHTML = technicalSkills.map(skill => `<span class="skill-chip">${escapeHTML(skill)}</span>`).join("");
+    $("#previewTechnicalSkills").innerHTML = technicalSkills.map(skill => `<li>${escapeHTML(skill)}</li>`).join("");
     setSectionVisibility("technicalSkillsSection", technicalSkills.length > 0);
 
     const softSkills = parseSkills(data.softSkills || "");
-    $("#previewSoftSkills").innerHTML = softSkills.map(skill => `<span class="skill-chip">${escapeHTML(skill)}</span>`).join("");
+    $("#previewSoftSkills").innerHTML = softSkills.map(skill => `<li>${escapeHTML(skill)}</li>`).join("");
     setSectionVisibility("softSkillsSection", softSkills.length > 0);
 
     const languages = parseSkills(data.languages || "");
-    $("#previewLanguages").innerHTML = languages.map(language => `<span class="skill-chip">${escapeHTML(language)}</span>`).join("");
+    $("#previewLanguages").innerHTML = languages.map(language => `<li>${escapeHTML(language)}</li>`).join("");
     setSectionVisibility("languagesSection", languages.length > 0);
 
     const hobbies = parseSkills(data.hobbies || "");
-    $("#previewHobbies").innerHTML = hobbies.map(item => `<span class="skill-chip">${escapeHTML(item)}</span>`).join("");
+    $("#previewHobbies").innerHTML = hobbies.map(item => `<li>${escapeHTML(item)}</li>`).join("");
     setSectionVisibility("hobbiesSection", hobbies.length > 0);
 
-    $("#summarySection h2").textContent = data.template === "peach" && sectionNames.profile === DEFAULT_SECTION_NAMES.profile
-      ? "Career Objective"
-      : sectionNames.profile || DEFAULT_SECTION_NAMES.profile;
+    $("#summarySection h2").textContent = getSummaryHeading(data.template, sectionNames);
     $("#educationSection h2").textContent = sectionNames.education || DEFAULT_SECTION_NAMES.education;
     $("#experienceSection h2").textContent = sectionNames.experience || DEFAULT_SECTION_NAMES.experience;
     $("#technicalSkillsSection h2").textContent = sectionNames.technicalSkills || DEFAULT_SECTION_NAMES.technicalSkills;
@@ -351,6 +357,59 @@
     $("#certificationsSection h2").textContent = sectionNames.certifications || DEFAULT_SECTION_NAMES.certifications;
 
     updateProgress(data);
+  }
+
+  function fitResumeToPage() {
+    const paper = $("#resumePaper");
+    const pageIndicator = $("#pageIndicator");
+    const minimumScale = 0.55;
+    const bottomSpacing = 12;
+    const previewTransform = paper.style.transform;
+    const previewTransition = paper.style.transition;
+    let scale = 1;
+
+    paper.style.transition = "none";
+    paper.style.transform = "none";
+    paper.style.setProperty("--resume-fit-scale", "1");
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+      const paperTop = paper.getBoundingClientRect().top;
+      const contentElements = [
+        ...paper.querySelectorAll(".resume-header, .resume-section:not([hidden])")
+      ];
+      const contentBottom = Math.max(
+        ...contentElements.map(element => element.getBoundingClientRect().bottom - paperTop)
+      );
+      const availableBottom = paper.clientHeight - parseFloat(getComputedStyle(paper).paddingBottom) - bottomSpacing;
+      if (contentBottom <= availableBottom) break;
+
+      const nextScale = Math.max(minimumScale, scale * availableBottom / contentBottom * 0.995);
+      if (nextScale === scale) break;
+      scale = nextScale;
+      paper.style.setProperty("--resume-fit-scale", String(scale));
+    }
+
+    const paperTop = paper.getBoundingClientRect().top;
+    const contentBottom = Math.max(
+      ...[...paper.querySelectorAll(".resume-header, .resume-section:not([hidden])")]
+        .map(element => element.getBoundingClientRect().bottom - paperTop)
+    );
+    const availableBottom = paper.clientHeight - parseFloat(getComputedStyle(paper).paddingBottom) - bottomSpacing;
+    const fits = contentBottom <= availableBottom;
+    const percentage = Math.round(scale * 100);
+    pageIndicator.textContent = fits
+      ? scale < 0.995 ? `A4 · Auto-fit ${percentage}%` : "A4 · 1 page"
+      : "A4 · Shorten content";
+    pageIndicator.title = fits
+      ? "All resume sections fit on one A4 page."
+      : "Some content exceeds one page. Shorten descriptions or remove entries to keep the resume readable.";
+    pageIndicator.dataset.fit = fits ? "true" : "false";
+    paper.style.transform = previewTransform;
+    paper.style.transition = previewTransition;
+  }
+
+  function scheduleResumeFit() {
+    cancelAnimationFrame(fitFrame);
+    fitFrame = requestAnimationFrame(fitResumeToPage);
   }
 
   function updateProgress(data) {
@@ -388,6 +447,7 @@
     ["technicalSkills", "softSkills", "languages", "hobbies"].forEach(syncTagGroup);
     const data = getData();
     renderPreview(data);
+    scheduleResumeFit();
     saveData();
   }
 
@@ -537,13 +597,16 @@
         <meta charset="utf-8">
         <title>${escapeHTML(data.fullName || "Resume")}</title>
         <style>
-          body { font-family: Arial, sans-serif; color: #222; line-height: 1.5; margin: 32px; }
-          h1 { font-size: 28px; margin-bottom: 8px; }
-          h2 { font-size: 18px; color: #1f2937; margin-top: 18px; }
-          p, div, li { font-size: 12px; }
-          ul { margin-top: 6px; padding-left: 20px; }
-          .header { border-bottom: 2px solid #d1d5db; padding-bottom: 12px; margin-bottom: 12px; }
-          .contact { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; margin-top: 8px; }
+          @page { size: A4; margin: 15mm; }
+          body { font-family: Arial, Helvetica, sans-serif; color: #222; font-size: 10pt; line-height: 1.4; margin: 0; }
+          h1 { font-size: 22pt; line-height: 1.15; margin: 0 0 5pt; }
+          h2 { font-size: 11pt; line-height: 1.2; color: #111; margin: 12pt 0 5pt; padding-bottom: 3pt; border-bottom: 1px solid #777; text-transform: uppercase; }
+          p, div, li { font-size: 10pt; }
+          section { break-inside: auto; }
+          ul { margin: 4pt 0 0; padding-left: 18pt; }
+          li { margin-bottom: 2pt; }
+          .header { border-bottom: 1px solid #555; padding-bottom: 8pt; margin-bottom: 8pt; }
+          .contact { display: flex; flex-wrap: wrap; gap: 4pt 10pt; font-size: 9pt; margin-top: 4pt; }
         </style>
       </head>
       <body>
@@ -552,9 +615,9 @@
           ${data.jobTitle ? `<div>${escapeHTML(data.jobTitle)}</div>` : ""}
           <div class="contact">${contact}</div>
         </div>
-        ${summary ? `<section><h2>${escapeHTML(sectionNames.profile || DEFAULT_SECTION_NAMES.profile)}</h2>${summary}</section>` : ""}
-        ${educationHtml ? `<section><h2>${escapeHTML(sectionNames.education || DEFAULT_SECTION_NAMES.education)}</h2>${educationHtml}</section>` : ""}
+        ${summary ? `<section><h2>${escapeHTML(getSummaryHeading(data.template, sectionNames))}</h2>${summary}</section>` : ""}
         ${experienceHtml ? `<section><h2>${escapeHTML(sectionNames.experience || DEFAULT_SECTION_NAMES.experience)}</h2>${experienceHtml}</section>` : ""}
+        ${educationHtml ? `<section><h2>${escapeHTML(sectionNames.education || DEFAULT_SECTION_NAMES.education)}</h2>${educationHtml}</section>` : ""}
         ${technicalSkills.length ? `<section><h2>${escapeHTML(sectionNames.technicalSkills || DEFAULT_SECTION_NAMES.technicalSkills)}</h2><ul>${technicalSkills.map(skill => `<li>${escapeHTML(skill)}</li>`).join("")}</ul></section>` : ""}
         ${softSkills.length ? `<section><h2>${escapeHTML(sectionNames.softSkills || DEFAULT_SECTION_NAMES.softSkills)}</h2><ul>${softSkills.map(skill => `<li>${escapeHTML(skill)}</li>`).join("")}</ul></section>` : ""}
         ${languages.length ? `<section><h2>${escapeHTML(sectionNames.languages || DEFAULT_SECTION_NAMES.languages)}</h2><ul>${languages.map(language => `<li>${escapeHTML(language)}</li>`).join("")}</ul></section>` : ""}
@@ -706,6 +769,9 @@
     $("#resumePaper").style.transform = `scale(${zoom / 100})`;
     $("#zoomLabel").textContent = `${zoom}%`;
   }
+  window.addEventListener("beforeprint", fitResumeToPage);
+  window.addEventListener("afterprint", scheduleResumeFit);
+  window.addEventListener("resize", scheduleResumeFit);
   $("#resetButton").addEventListener("click", () => {
     if (confirm("Clear all resume details? Your current edits will be replaced.")) {
       populateForm(emptyResume);
