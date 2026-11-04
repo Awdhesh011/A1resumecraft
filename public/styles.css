@@ -195,7 +195,18 @@ button { cursor: pointer; }
   html, body { width: 210mm; min-height: 297mm; margin: 0 !important; background: #fff !important; }
   body * { visibility: hidden !important; }
   #resumePaper, #resumePaper * { visibility: visible !important; }
-  #resumePaper { position: absolute !important; left: 0 !important; top: 0 !important; width: calc(210mm / var(--resume-fit-scale)) !important; max-width: none !important; min-height: calc(297mm / var(--resume-fit-scale)) !important; margin: 0 !important; padding: 15mm 15mm 10mm !important; box-shadow: none !important; transform: none !important; }
+  #resumePaper {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: calc(595px / var(--resume-fit-scale)) !important;
+    max-width: none !important;
+    min-height: calc(842px / var(--resume-fit-scale)) !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    zoom: calc(1.3333 * var(--resume-fit-scale)) !important;
+  }
   .resume-section, .resume-entry { break-inside: avoid; }
   .resume-paper { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 }
@@ -628,14 +639,7 @@ button { cursor: pointer; }
     .template-editorial .resume-name-block h1 { font-size: 27px; }
   }
 
-  @media print {
-    .template-sidebar .resume-header {
-      margin: -15mm -15mm 0;
-      padding: 10mm 15mm 8mm;
-    }
-    .template-editorial { background-position: 15mm 9mm; }
   }
-}
 
 .template-two-column .resume-header {
   align-items: center;
@@ -966,12 +970,6 @@ button { cursor: pointer; }
 .template-professional #hobbiesSection { order: 9; }
 .template-professional #customSectionsPreview { order: 10; }
 .template-professional .custom-resume-section { margin-top: 10pt; }
-@media print {
-  .template-professional { padding: 15mm !important; }
-  .template-professional .resume-section,
-  .template-professional .resume-entry { break-inside: avoid; }
-}
-
 #resumePaper,
 #resumePaper * {
   font-family: Arial, Helvetica, sans-serif !important;
